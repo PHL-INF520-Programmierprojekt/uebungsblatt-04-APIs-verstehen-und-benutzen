@@ -53,17 +53,16 @@ public class LibraryTest {
     public void task_1_visitors_paula_and_simon_registered() throws Exception {
         PowerMockito.whenNew(Library.class).withAnyArguments().thenReturn(librarySpy);
         LibraryDay.main(null);
-        try{
+        try {
             verify(librarySpy).registerVisitor("Paula");
             verify(librarySpy).registerVisitor("Simon");
-        }
-        catch (AssertionError e){
+        } catch (AssertionError e) {
             fail("The visitors 'Paula' and/or 'Simon' where not correctly registered.");
         }
     }
 
     @Test
-    public void task_2_returnBook_with_empty_book_throws_IllegalArgumentException(){
+    public void task_2_returnBook_with_empty_book_throws_IllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> librarySpy.returnBook("", 42),
                 "The 'returnBook' method does not throw an 'IllegalArgumentException' if the title is empty.");
 
@@ -73,7 +72,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void task_2_returnBook_with_book_not_borrowed_throws_IllegalArgumentException(){
+    public void task_2_returnBook_with_book_not_borrowed_throws_IllegalArgumentException() {
         int visitorID = librarySpy.registerVisitor("Smeagol");
 
         assertThrows(IllegalArgumentException.class, () -> librarySpy.returnBook("Dragon Ball Z: Battle of the Gods", visitorID),
@@ -81,7 +80,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void task_2_returnBook_with_borrowed_book_succeeds(){
+    public void task_2_returnBook_with_borrowed_book_succeeds() {
         int visitorID = librarySpy.registerVisitor("Smeagol");
         librarySpy.lendBook(books.get(0).getTitle(), visitorID);
         assertDoesNotThrow(() -> librarySpy.returnBook(books.get(0).getTitle(), visitorID),
@@ -90,7 +89,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void task_3_searchAvailableBooks_with_empty_or_null_author_throws_IllegalArgumentException(){
+    public void task_3_searchAvailableBooks_with_empty_or_null_author_throws_IllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> librarySpy.searchAvailableBooks(""),
                 "The 'searchBooks' method does not throw an 'IllegalArgumentException' if the searchTerm is empty.");
 
@@ -99,17 +98,17 @@ public class LibraryTest {
     }
 
     @Test
-    public void task_3_searchAvailableBooks_with_existing_author_returns_book(){
-        Set<Book> matches =  librarySpy.searchAvailableBooks("Tolkien");
-        assertTrue(matches.size() == 2 && matches.contains(books.get(0)),
+    public void task_3_searchAvailableBooks_with_existing_author_returns_book() {
+        Set<Book> matches = librarySpy.searchAvailableBooks("Tolkien");
+        assertTrue(null != matches && matches.size() == 2 && matches.contains(books.get(0)),
                 "The 'searchAvailableBooks' method does not return the book with the search term for the given author.");
 
     }
 
     @Test
-    public void task_3_searchAvailableBooks_with_existing_title_returns_book(){
-        Set<Book> matches =  librarySpy.searchAvailableBooks("the Rings");
-        assertTrue(matches.contains(books.get(0)),
+    public void task_3_searchAvailableBooks_with_existing_title_returns_book() {
+        Set<Book> matches = librarySpy.searchAvailableBooks("the Rings");
+        assertTrue(null != matches && matches.size() > 0 && matches.contains(books.get(0)),
                 "The 'searchAvailableBooks' method does not return the book with the search term for the title.");
     }
 
