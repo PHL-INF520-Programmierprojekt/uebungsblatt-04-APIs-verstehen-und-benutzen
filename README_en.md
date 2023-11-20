@@ -122,10 +122,12 @@ The API is located in the `de.phl.programmingproject.candyproduction` package an
 
 ### Tasks
 
-1. Implement the `main` operation of the class `CandyProducer` to manually create a candy. The candy should consist of a strawberry and blueberry flavored sugar mix and contains a lemon flavored juicy core.
-2. Implement the operation `printCandy(final Candy candy)` which prints a string representation of the given candy. Use a format string to build the string representation.
-3. Implement the second constructor of the `Candy` class and the `getJuicyCore` operation. The second constructor should create a candy with a sugar mix and a juicy core. The `getJuicyCore` operation should return the juicy core of the candy.
-4. Implement the `produceCandies` operation in the `CandyFactory` class. This operation should produce `amount` candies with unique flavor combinations.
+1. Implement the `main` operation of the class `CandyProducer` to manually create a candy. The candy should consist of a strawberry and blueberry flavored sugar mix.
+2. Implement the second constructor of the `Candy` class and the `getJuicyCore` operation. The second constructor should create a candy with a sugar mix and a juicy core. The `getJuicyCore` operation should return the juicy core of the candy.
+3. Extend the `main` operation and manually create a candy with a strawberry and blueberry flavored sugar mix and contains a lemon flavored juicy core.
+4. Implement the operation `printCandy(final Candy candy)` which prints a string representation of the given candy. Use a format string (`String.format(...)`) to build the string representation.
+5. Implement the `produceCandies` operation in the `CandyFactory` class. This operation should produce `amount` candies with unique flavor combinations (i.e., each candy must have a unique set of sugar mixes with a juicy core). 
+   * Note: You need to add the sugar mixes and juicy cores to the candy factory before calling `produceCandies(final int amount)`!. 
 
 ## Exercise: Discussion
 
