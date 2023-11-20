@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * A library that contains books and visitors and allows lending and returning.
+ */
 public class Library {
     private final Collection<Book> books;
     private final Set<Visitor> visitors;
@@ -38,7 +41,7 @@ public class Library {
     }
 
     /**
-     * Lends a book with the given title to the visitor with the given ID.
+     * Lends out a book with the given title to the visitor with the given ID.
      *
      * @param title     The title of the book.
      * @param visitorId The ID of the visitor.
@@ -49,7 +52,7 @@ public class Library {
     public void lendBook(final String title, final int visitorId) {
         final Visitor visitor = getVisitor(visitorId);
         if (visitor.getLentBooks().stream().anyMatch(book -> book.getTitle().equals(title))) {
-            throw new IllegalArgumentException("Visitor has already lent the book");
+            throw new IllegalArgumentException("Visitor has already borrowed the book");
         }
         for (final Book book : books) {
             if (book.getTitle().equals(title)) {
@@ -101,4 +104,13 @@ public class Library {
         visitors.add(visitor);
         return visitor.getId();
     }
+
+    /**
+     * Returns the number of books in the library.
+     * @return
+     */
+    public int getBookCount() {
+        return books.size();
+    }
+
 }
