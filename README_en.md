@@ -37,15 +37,15 @@ The API is located in the `de.phl.programmingproject.restaurant` package and con
    Then, place ten orders and let them be processed. The `orderNames` list contains the names for all orders.
 2. Implement the restaurant's `placeOrder` operation and the employee's `assignOrder` operation. Pay attention to defensive programming.
 3. Implement the `processOrders` operation of the `Employee` class. An order is processes by calling its `handle` operation and removing it from the employee's collection.
-4. Discuss which Java Collection fits most to store the orders and argue why. Does the same apply to the employees?
+4. Discuss which Java Collection fits most to store the orders and argue why. Does the same apply to the employees? Submit your answers in a markdown file `restaurant_orders.md` in the root directory.
 
 
 ## Exercise: Library API
 
 ### Problem Statement
 
-In this exercise, you will create a program that uses a provided Library API to manage books, visitors, and lending.
-The Library API provides a set of operations for searching and retrieving information about books, visitors, and lending books.
+In this exercise, you will create a program that uses a provided Library API to manage books, visitors, and lending out books.
+The Library API provides a set of operations for searching and retrieving information about books, visitors, and lending out books.
 Your task is to implement a program that uses this API to solve a few tasks.
 
 ### API
@@ -56,9 +56,9 @@ The API is contained in a class called `Library` and is located in the `de.phl.p
 - `Set<Book> searchAvailableBooks(final String searchTerm)` - Searches for books based on a given search term and returns a set of matching books.
   The search term can be either a part of a book title or an author's name.
   The search term must not be `null` or empty.
-- `void lendBook(final String title, final int visitorId)` - Lends a book to a visitor.
-- `void returnBook(final String title, final int visitorId)` - Returns a book that was previously lent to a visitor.
-  The book must not be lent and the visitor hat to be registered.
+- `void lendBook(final String title, final int visitorId)` - Lends out a book to a visitor.
+- `void returnBook(final String title, final int visitorId)` - Returns a book that was previously lent to a registered visitor.
+  The book must be lent out to the visitor and the visitor has to be registered previously.
 - `Visitor getVisitor(final int visitorId)` - Retrieves information about a specific visitor, given their ID.
 - `int registerVisitor(final String name)` - Registers a visitor and returns their ID. The name should not be `null` or empty and not registered yet.
 
@@ -78,14 +78,14 @@ The `Visitor` class represents a visitor in the library and should have the foll
 ### Tasks
 
 1. Implement the `main` operation of a class called `LibraryDay`. Create the Library `lib` and provide three books.
-   Then, create the visitors Paula, and Simon by registering them at the library.
-   Paula and Simon should lend one different book each.
-   Then, Paula returns her lent book.
+   Then, create the visitors Paula and Simon by registering them at the library.
+   Paula and Simon should borrow one different book each.
+   Then, Paula returns her borrowed book.
 2. Implement the `returnBook` operation.
    Pay attention to defensive programming.
 3. Implement the `searchAvailableBooks` operation.
    Pay attention to defensive programming.
-4. Discuss which Java Collection fits most to store the books and argue why.
+4. Discuss which Java Collection fits most to store the books and argue why. Submit your answers in a markdown file `library.md` in the root directory.
 
 
 
@@ -132,5 +132,5 @@ The API is located in the `de.phl.programmingproject.candyproduction` package an
 Discuss with your partner what a good API description should contain.
 Try to remember which information you were lacking to in the APIs stated above.
 
-
-**Next Sheet**: [_Writing own operations in given Java classes_](
+### Tasks
+1. Submit your answers in a markdown file `discussion.md` in the root directory.
