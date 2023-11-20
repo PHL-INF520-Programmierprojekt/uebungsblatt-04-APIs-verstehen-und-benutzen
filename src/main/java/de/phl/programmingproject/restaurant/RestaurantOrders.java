@@ -13,6 +13,18 @@ public class RestaurantOrders {
         final List<String> orderNames = Arrays.asList(
                 "Pizza", "Pasta", "Salad", "Soup", "Burger", "Steak", "Fries", "Ice Cream", "Cake", "Pie");
         // TODO: Implement this operation
+
+        Employee owner = new Employee();
+        Restaurant restaurant = new Restaurant(owner);
+
+        Employee employee = new Employee();
+        restaurant.hireEmployee(employee);
+
+        for (String orderName : orderNames) {
+            restaurant.placeOrder(new Order(orderName));
+        }
+
+        restaurant.process();
     }
 
 }
