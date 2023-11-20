@@ -102,7 +102,6 @@ public class LibraryTest {
         Set<Book> matches = librarySpy.searchAvailableBooks("Tolkien");
         assertTrue(null != matches && matches.size() == 2 && matches.contains(books.get(0)),
                 "The 'searchAvailableBooks' method does not return the book with the search term for the given author.");
-
     }
 
     @Test
