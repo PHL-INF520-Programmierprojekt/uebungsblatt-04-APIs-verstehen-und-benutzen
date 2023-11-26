@@ -25,6 +25,7 @@ tasks.test {
     //useJUnitPlatform()
     useJUnit() // we need JUnit4 to be able to mock constructors
 
+    // Note: this is only necessary if we want to mock constructors using PowerMockito
     // if Java9+ then we need to open some packages for PowerMockito
     if (!System.getProperty("java.version").startsWith("1.8") && JavaVersion.current().isJava9Compatible) {
             jvmArgs(
