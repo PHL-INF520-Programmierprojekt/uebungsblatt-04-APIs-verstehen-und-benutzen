@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -83,6 +84,8 @@ public class CandyProductionLineTest extends TestBase {
             juicyCore = invocation.getArgument(1);
             return candySpy;
         }).thenReturn(candySpy);
+
+        PowerMockito.whenNew(Candy.class).withArguments(Mockito.any(SugarMix.class)).thenReturn(candySpy);
 
         CandyProducer.main(null);
         try {
