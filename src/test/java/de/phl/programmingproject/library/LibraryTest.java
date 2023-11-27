@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Test class for the {@link LibraryDay} exercise.
@@ -38,8 +38,10 @@ public class LibraryTest {
     public void task_1_library_with_three_books_and_two_visitors_was_created() throws Exception {
 
         PowerMockito.whenNew(Library.class).withAnyArguments().thenReturn(librarySpy);
+        Mockito.doNothing().when(librarySpy).lendBook(anyString(), anyInt());
+        Mockito.doNothing().when(librarySpy).returnBook(anyString(), anyInt());
+
         LibraryDay.main(null);
-        System.out.println(librarySpy);
         try {
             PowerMockito.verifyNew(Library.class).withArguments(Mockito.any(Collection.class));
         } catch (AssertionError e) {
@@ -52,6 +54,8 @@ public class LibraryTest {
     @Test
     public void task_1_visitors_paula_and_simon_registered() throws Exception {
         PowerMockito.whenNew(Library.class).withAnyArguments().thenReturn(librarySpy);
+        Mockito.doNothing().when(librarySpy).lendBook(anyString(), anyInt());
+        Mockito.doNothing().when(librarySpy).returnBook(anyString(), anyInt());
         LibraryDay.main(null);
         try {
             verify(librarySpy).registerVisitor("Paula");
