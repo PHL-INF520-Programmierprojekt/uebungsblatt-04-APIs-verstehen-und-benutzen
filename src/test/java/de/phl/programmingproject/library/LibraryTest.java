@@ -116,7 +116,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void task_4_restaurant_orders_markdown_file_exists_in_root_directory() {
+    public void task_4_library_markdown_file_exists_in_root_directory() {
         assertTrue(TestUtils.fileExistsInRootOrSrcDirectory("library.md"), "The file 'library.md' does not exist in the root (or './src') directory of the project.");
     }
 }
