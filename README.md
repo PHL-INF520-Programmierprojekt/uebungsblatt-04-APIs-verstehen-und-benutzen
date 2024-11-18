@@ -3,7 +3,7 @@
 
 In diesem Übungsblatt lernen Sie, gegebene APIs zu lesen und zu verstehen und sie zur Lösung verschiedener Aufgaben einzusetzen.
 
-## Übung: Restaurantbestellungen
+## Übung 01: Restaurantbestellungen
 
 ### Problemstellung
 
@@ -40,7 +40,7 @@ Die API befindet sich im Paket `de.phl.programmingproject.restaurant` und enthä
 4. Diskutieren Sie, welche Java-`Collection` am besten geeignet ist, um die Bestellungen zu speichern und begründen Sie warum. Gilt dasselbe für die Mitarbeiter&ast;innen? Geben Sie Ihre Antworten in einer Markdown-Datei `restaurant_orders.md` im Hauptverzeichnis ab.
 
 
-## Übung: Bibliotheks-API
+## Übung 02: Bibliotheks-API
 
 ### Problemstellung
 
@@ -89,7 +89,7 @@ Die Klasse `Visitor` repräsentiert eine&ast;n Besucher&ast;in in der Bibliothek
 
 
 
-## Übung: Süßwarenproduktionslinie
+## Übung 03: Süßwarenproduktionslinie
 
 ### Problemstellung
 
@@ -130,9 +130,9 @@ Die API befindet sich im Paket `de.phl.programmingproject.candyproduction` und e
 5. Implementieren Sie die Operation `produceCandies` in der Klasse `CandyFactory`. Diese Operation sollte `amount` Bonbons mit einzigartigen Geschmackskombinationen produzieren (d.h., jedes Bonbon muss eine einzigartige Mischung von Zucker-Mischungen mit einem saftigen Kern haben).
     * Hinweis: Sie müssen die Zucker-Mischungen und saftigen Kerne zur Bonbonfabrik hinzufügen, bevor Sie `produceCandies(final int amount)` aufrufen!
 
-## Übung: Diskussion
+## Übung 04: Diskussion
 
-Diskutieren Sie mit Ihrer*m Partner*in, was eine gute API-Beschreibung enthalten sollte.
+Diskutieren Sie mit Ihrer\*m Partner\*in, was eine gute API-Beschreibung enthalten sollte.
 Versuchen Sie sich daran zu erinnern, welche Informationen Ihnen bei den oben genannten APIs gefehlt haben.
 
 ### Aufgaben
