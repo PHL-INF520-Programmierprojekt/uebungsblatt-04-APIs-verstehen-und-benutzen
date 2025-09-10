@@ -14,18 +14,22 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test class for {@link CandyProducer} exercise.
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({CandyProducer.class, CandyProductionLineTest.class})
+@PrepareForTest({ CandyProducer.class, CandyProductionLineTest.class })
 public class CandyProductionLineTest extends TestBase {
 
     Candy candySpy;
@@ -51,15 +55,17 @@ public class CandyProductionLineTest extends TestBase {
 
         try {
             PowerMockito.verifyNew(Candy.class).withArguments(Mockito.any(SugarMix.class));
-        }
-        catch (AssertionError e){
+        } catch (AssertionError e) {
             fail("The 'main' method of the 'CandyProducer' class does not create a 'Candy' object with a 'SugarMix' as argument.");
         }
 
-        Assertions.assertTrue(sugarMix.getFlavors().contains("Strawberry") || sugarMix.getFlavors().contains("strawberry"), "The sugar mix of the candy does not contain 'Strawberry'.");
-        Assertions.assertTrue(sugarMix.getFlavors().contains("Blueberry") || sugarMix.getFlavors().contains("blueberry"), "The sugar mix of the candy does not contain 'Blueberry'.");
+        Assertions.assertTrue(
+                sugarMix.getFlavors().contains("Strawberry") || sugarMix.getFlavors().contains("strawberry"),
+                "The sugar mix of the candy does not contain 'Strawberry'.");
+        Assertions.assertTrue(
+                sugarMix.getFlavors().contains("Blueberry") || sugarMix.getFlavors().contains("blueberry"),
+                "The sugar mix of the candy does not contain 'Blueberry'.");
     }
-
 
     @Test
     public void task_2_constructor_with_sugar_mix_and_juicy_core_implemented() {
@@ -76,28 +82,57 @@ public class CandyProductionLineTest extends TestBase {
     }
 
     @Test
-    public void task_3_main_method_creates_candy_with_strawberry_and_blueberry_sugar_mix_flavor_and_lemon_juicy_core() throws Exception {
+    public void task_3_main_method_creates_at_least_one_candy_with_strawberry_blueberry_mix_and_lemon_core()
+            throws Exception {
+        // collect ALL calls with (SugarMix, JuicyCore), then check if one matches
+        List<SugarMix> capturedSugarMixes = new ArrayList<>();
+        List<JuicyCore> capturedJuicyCores = new ArrayList<>();
 
-        PowerMockito.whenNew(Candy.class).withArguments(Mockito.any(SugarMix.class),
-                Mockito.any(JuicyCore.class)).then(invocation -> {
-            sugarMix = invocation.getArgument(0);
-            juicyCore = invocation.getArgument(1);
-            return candySpy;
-        }).thenReturn(candySpy);
+        // Stub: 2-Arguments-Constructor -> Record arguments
+        PowerMockito.whenNew(Candy.class)
+                .withArguments(Mockito.any(SugarMix.class), Mockito.any(JuicyCore.class))
+                .thenAnswer(invocation -> {
+                    SugarMix sm = invocation.getArgument(0);
+                    JuicyCore jc = invocation.getArgument(1);
+                    capturedSugarMixes.add(sm);
+                    capturedJuicyCores.add(jc);
+                    return candySpy;
+                });
 
-        PowerMockito.whenNew(Candy.class).withArguments(Mockito.any(SugarMix.class)).thenReturn(candySpy);
+        // Stub: 1-argument constructor -> doesn't matter, just no real build
+        // if main() calls new Candy(new SugarMix(...)) with just one argument, we don’t care about its internals for this particular test. We only care about the two-argument constructor (Candy(SugarMix, JuicyCore)), because that’s the one Task 3 is testing.
+        PowerMockito.whenNew(Candy.class)
+                .withArguments(Mockito.any(SugarMix.class))
+                .thenReturn(candySpy);
 
         CandyProducer.main(null);
+
+        // Verify: At least one call with (SugarMix, JuicyCore)
         try {
-            PowerMockito.verifyNew(Candy.class).withArguments(Mockito.any(SugarMix.class),
-                    Mockito.any(JuicyCore.class));
+            PowerMockito.verifyNew(Candy.class, Mockito.atLeastOnce())
+                    .withArguments(Mockito.any(SugarMix.class), Mockito.any(JuicyCore.class));
+        } catch (AssertionError e) {
+            fail("The 'main' method of the 'CandyProducer' class never creates a 'Candy' with 'SugarMix' and 'JuicyCore'.");
         }
-        catch (AssertionError e){
-            fail("The 'main' method of the 'CandyProducer' class does not create a 'Candy' object with 'SugarMix' and 'JuicyCore' as arguments.");
+
+        // Check contents: Is there a match AMONG THE CAPTURED calls?
+        boolean found = false;
+        for (int i = 0; i < capturedSugarMixes.size(); i++) {
+            SugarMix sm = capturedSugarMixes.get(i);
+            JuicyCore jc = capturedJuicyCores.get(i);
+
+            boolean hasStrawberry = containsIgnoreCase(sm.getFlavors(), "Strawberry");
+            boolean hasBlueberry = containsIgnoreCase(sm.getFlavors(), "Blueberry");
+            boolean isLemon = "lemon".equalsIgnoreCase(jc.getFlavor());
+
+            if (hasStrawberry && hasBlueberry && isLemon) {
+                found = true;
+                break;
+            }
         }
-        Assertions.assertTrue(sugarMix.getFlavors().contains("Strawberry") || sugarMix.getFlavors().contains("strawberry"), "The sugar mix of the candy does not contain 'Strawberry'.");
-        Assertions.assertTrue(sugarMix.getFlavors().contains("Blueberry") || sugarMix.getFlavors().contains("blueberry"), "The sugar mix of the candy does not contain 'Blueberry'.");
-        Assertions.assertEquals("lemon", juicyCore.getFlavor().toLowerCase(), "The juicy core of the candy does not have the flavor 'Lemon'.");
+
+        assertTrue(found,
+                "No Candy constructed with SugarMix containing 'Strawberry' and 'Blueberry' and JuicyCore flavor 'Lemon'.");
     }
 
     @Test
@@ -122,12 +157,14 @@ public class CandyProductionLineTest extends TestBase {
         candyFactory.addJuicyCoreFlavors(Arrays.asList("Lemon", "Cherry", "Raspberry"));
 
         Set<Candy> candies = candyFactory.produceCandies(45);
-        assertNotNull(candies, "The 'produceCandies' method of the 'CandyFactory' class does not return a set of candies.");
+        assertNotNull(candies,
+                "The 'produceCandies' method of the 'CandyFactory' class does not return a set of candies.");
 
         // verify that all produced candies are unique
         for (Candy candy : candies) {
             for (Candy candy1 : candies) {
-                if (candy == candy1) continue;
+                if (candy == candy1)
+                    continue;
                 if (candy.getSugarMix().getFlavors().equals(candy1.getSugarMix().getFlavors())) {
                     if (candy.hasJuiceCore() && candy1.hasJuiceCore()
                             && candy.getJuicyCore().equals(candy1.getJuicyCore())) {
@@ -144,6 +181,15 @@ public class CandyProductionLineTest extends TestBase {
         Assertions.assertEquals(45, candies.size(),
                 "The 'produceCandies' method of the 'CandyFactory' class does not produce the correct amount of candies.");
 
-
     }
+
+    // helperfunction for case-insensitive contains
+    private static boolean containsIgnoreCase(Collection<String> values, String target) {
+        for (String v : values) {
+            if (v != null && v.equalsIgnoreCase(target))
+                return true;
+        }
+        return false;
+    }
+
 }
