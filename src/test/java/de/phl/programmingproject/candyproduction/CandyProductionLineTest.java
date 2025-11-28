@@ -1,19 +1,15 @@
 package de.phl.programmingproject.candyproduction;
 
 import de.phl.programmingproject.TestBase;
+import de.phl.programmingproject.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,10 +56,10 @@ public class CandyProductionLineTest extends TestBase {
         }
 
         Assertions.assertTrue(
-                sugarMix.getFlavors().contains("Strawberry") || sugarMix.getFlavors().contains("strawberry"),
+                containsIgnoreCase(sugarMix.getFlavors(), "Strawberry"),
                 "The sugar mix of the candy does not contain 'Strawberry'.");
         Assertions.assertTrue(
-                sugarMix.getFlavors().contains("Blueberry") || sugarMix.getFlavors().contains("blueberry"),
+                containsIgnoreCase(sugarMix.getFlavors(),"Blueberry"),
                 "The sugar mix of the candy does not contain 'Blueberry'.");
     }
 
@@ -82,7 +78,7 @@ public class CandyProductionLineTest extends TestBase {
     }
 
     @Test
-    public void task_3_main_method_creates_at_least_one_candy_with_strawberry_blueberry_mix_and_lemon_core()
+    public void task_3_main_method_creates_at_least_one_candy_with_strawberry_blueberry_mix_and_lemon_juicy_core()
             throws Exception {
         // collect ALL calls with (SugarMix, JuicyCore), then check if one matches
         List<SugarMix> capturedSugarMixes = new ArrayList<>();
@@ -137,17 +133,10 @@ public class CandyProductionLineTest extends TestBase {
 
     @Test
     public void task_4_printCandy_prints_string_representation() throws NoSuchMethodException {
-        String filePath = "./src/main/java/de/phl/programmingproject/candyproduction/CandyProducer.java";
-        String candyProducerFileContent = null;
-        try {
-            candyProducerFileContent = new String(Files.readAllBytes(Paths.get(filePath)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String candyProducerFileContent = TestUtils.getFileContentForFileInRootOrSrcDirectory("/main/java/de/phl/programmingproject/candyproduction/CandyProducer.java");
 
         Assertions.assertTrue(candyProducerFileContent.contains("String.format"),
                 "The 'printCandy' method of the 'CandyProducer' class does not use the 'String.format' method to create the string representation of the candy.");
-
     }
 
     @Test
@@ -183,7 +172,12 @@ public class CandyProductionLineTest extends TestBase {
 
     }
 
-    // helperfunction for case-insensitive contains
+    /**
+     * Helper function to check if a collection contains a string, ignoring case.
+     * @param values
+     * @param target
+     * @return
+     */
     private static boolean containsIgnoreCase(Collection<String> values, String target) {
         for (String v : values) {
             if (v != null && v.equalsIgnoreCase(target))
