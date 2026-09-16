@@ -117,11 +117,11 @@ public class RestaurantTest {
     @Test
     public void task_2_placeOrder_calls_assignOrder_on_least_busy_employee() {
         Employee leastBusyEmployeeMock = Mockito.mock(Employee.class);
-        when(leastBusyEmployeeMock.currentOrderCount()).thenReturn(1);
+        when(leastBusyEmployeeMock.currentOrdersCount()).thenReturn(1);
         Employee busyEmployeeMock = Mockito.mock(Employee.class);
-        when(busyEmployeeMock.currentOrderCount()).thenReturn(2);
+        when(busyEmployeeMock.currentOrdersCount()).thenReturn(2);
 
-        when(employeeSpy.currentOrderCount()).thenReturn(5);
+        when(employeeSpy.currentOrdersCount()).thenReturn(5);
         List<Employee> busyEmployees = new ArrayList<Employee>() {{
             add(busyEmployeeMock);
             add(employeeSpy);
@@ -137,7 +137,7 @@ public class RestaurantTest {
             fail("The 'placeOrder' method of the 'Restaurant' class does not call the 'assignOrder' method of the least busy employee.");
         }
         for (Employee employee : busyEmployees) {
-            Mockito.verify(employee, Mockito.atLeast(1)).currentOrderCount();
+            Mockito.verify(employee, Mockito.atLeast(1)).currentOrdersCount();
             Mockito.verifyNoMoreInteractions(employee);
         }
     }
@@ -153,7 +153,7 @@ public class RestaurantTest {
     public void task_2_assignOrder_increases_order_count() {
         Employee employee = new Employee();
         employee.assignOrder(new Order("test"));
-        assertEquals(1, employee.currentOrderCount(), "The 'assignOrder' method of the 'Employee' class does not add the order to the queue of orders!");
+        assertEquals(1, employee.currentOrdersCount(), "The 'assignOrder' method of the 'Employee' class does not add the order to the queue of orders!");
     }
 
     @Test
@@ -161,14 +161,14 @@ public class RestaurantTest {
         Employee employeeSpy = Mockito.spy(new Employee());
         Order orderSpy = Mockito.spy(new Order("spy"));
         employeeSpy.assignOrder(orderSpy);
-        int orderCnt = employeeSpy.currentOrderCount();
+        int orderCnt = employeeSpy.currentOrdersCount();
         employeeSpy.processOrders();
         try {
             Mockito.verify(orderSpy).handle();
         } catch (AssertionError e) {
             fail("The 'processOrder' method of the 'Employee' class does not call the 'handle' method of the 'Order' class");
         }
-        assertEquals(orderCnt - 1, employeeSpy.currentOrderCount(),
+        assertEquals(orderCnt - 1, employeeSpy.currentOrdersCount(),
                 "The 'processOrders' method of the 'Employee' class does not remove the order from the queue of orders.");
 
     }

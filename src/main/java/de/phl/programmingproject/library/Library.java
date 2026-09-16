@@ -51,8 +51,10 @@ public class Library {
      */
     public void lendBook(final String title, final int visitorId) {
         final Visitor visitor = getVisitor(visitorId);
-        if (visitor.getLentBooks().stream().anyMatch(book -> book.getTitle().equals(title))) {
-            throw new IllegalArgumentException("Visitor has already borrowed the book");
+        for (Book lentBook : visitor.getLentBooks()) {
+            if (lentBook.getTitle().equals(title)) {
+                throw new IllegalArgumentException("Visitor has already lent the book");
+            }
         }
         for (final Book book : books) {
             if (book.getTitle().equals(title)) {

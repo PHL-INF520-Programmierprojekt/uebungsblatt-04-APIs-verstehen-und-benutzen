@@ -55,6 +55,7 @@ public class CandyProductionLineTest extends TestBase {
             fail("The 'main' method of the 'CandyProducer' class does not create a 'Candy' object with a 'SugarMix' as argument.");
         }
 
+        // TODO: auch Deutsche Varianten akzeptieren
         Assertions.assertTrue(
                 containsIgnoreCase(sugarMix.getFlavors(), "Strawberry"),
                 "The sugar mix of the candy does not contain 'Strawberry'.");
@@ -155,10 +156,10 @@ public class CandyProductionLineTest extends TestBase {
                 if (candy == candy1)
                     continue;
                 if (candy.getSugarMix().getFlavors().equals(candy1.getSugarMix().getFlavors())) {
-                    if (candy.hasJuiceCore() && candy1.hasJuiceCore()
+                    if (candy.hasJuicyCore() && candy1.hasJuicyCore()
                             && candy.getJuicyCore().equals(candy1.getJuicyCore())) {
                         fail("The 'produceCandies' method of the 'CandyFactory' class does not produce unique candies.");
-                    } else if (!candy.hasJuiceCore() && !candy1.hasJuiceCore()) {
+                    } else if (!candy.hasJuicyCore() && !candy1.hasJuicyCore()) {
                         CandyProducer.printCandy(candy);
                         CandyProducer.printCandy(candy1);
                         fail("The 'produceCandies' method of the 'CandyFactory' class does not produce unique candies.");

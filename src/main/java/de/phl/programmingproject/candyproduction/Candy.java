@@ -50,11 +50,11 @@ public class Candy {
     }
 
     /**
-     * Checks if this candy has a juice core.
+     * Checks if this candy has a juicy core.
      *
-     * @return True if it has a juice core.
+     * @return True if it has a juicy core.
      */
-    public boolean hasJuiceCore() {
+    public boolean hasJuicyCore() {
         return this.juicyCore.isPresent();
     }
 }

@@ -22,7 +22,7 @@ public class Employee {
         // TODO: Implement this operation
     }
 
-    public int currentOrderCount() {
+    public int currentOrdersCount() {
         return orders.size();
     }
 

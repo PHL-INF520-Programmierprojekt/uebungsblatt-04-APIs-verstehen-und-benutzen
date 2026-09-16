@@ -123,7 +123,7 @@ Die API befindet sich im Paket [`de.phl.programmingproject.candyproduction`](src
 
 ### Aufgaben
 
-1. Implementieren Sie die `main`-Operation der Klasse [`CandyProducer`](src/main/java/de/phl/programmingproject/candyproduction/CandyProducer.java), um manuell ein Bonbon zu erstellen. Das Bonbon sollte aus einer Erdbeer- und Heidelbeer-geschmackten Zucker-Mischung bestehen.
+1. Implementieren Sie die `main`-Operation der Klasse [`CandyProducer`](src/main/java/de/phl/programmingproject/candyproduction/CandyProducer.java), um manuell ein Bonbon zu erstellen. Das Bonbon sollte aus einer Strawberry (Erdbeere) und Blueberry (Heidelbeere) Zucker-Mischung bestehen.
 2. Implementieren Sie den zweiten Konstruktor der Klasse `Candy` und die Operation `getJuicyCore`. Der zweite Konstruktor sollte ein Bonbon mit einer Zucker-Mischung und einem saftigen Kern erstellen. Die Operation `getJuicyCore` sollte den saftigen Kern des Bonbons zurückgeben.
 3. Erweitern Sie die `main`-Operation und erstellen Sie manuell ein Bonbon, das aus einer Zucker-Mischung mit "Strawberry"- und "Blueberry"-Geschmack besteht und einen saftigen Kern mit "Lemon"-Geschmack enthält.
 4. Implementieren Sie die Operation `printCandy(final Candy candy)`, die eine String-Repräsentation des gegebenen Bonbons ausgibt. Verwenden Sie einen Formatstring (`String.format(...)`) um die String-Repräsentation zu erstellen.
