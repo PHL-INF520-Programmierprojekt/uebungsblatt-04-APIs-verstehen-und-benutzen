@@ -34,7 +34,7 @@ Die API befindet sich im Paket [`de.phl.programmingproject.restaurant`](src/main
 ### Aufgaben
 
 1. Implementieren Sie die `main`-Operation der Klasse [`RestaurantOrders`](src/main/java/de/phl/programmingproject/restaurant/RestaurantOrders.java), um manuell ein Restaurant mit einem Inhaber und einer&ast;m Mitarbeiter&ast;in zu erstellen.
-   Dann geben Sie zehn Bestellungen auf und lassen Sie diese bearbeiten. Die Liste `orderNames` enthält die Namen für alle Bestellungen.
+   Dann geben Sie zehn Bestellungen auf und lassen Sie diese durch `restaurant.process()` bearbeiten. Die Liste `orderNames` enthält die Namen für alle Bestellungen.
 2. Implementieren Sie die Operation `placeOrder` des Restaurants und die Operation `assignOrder` der Mitarbeiter&ast;in. Achten Sie auf defensive Programmierung.
 3. Implementieren Sie die Operation `processOrders` der Klasse `Employee`. Eine Bestellung wird bearbeitet, indem ihre Operation `handle` aufgerufen und sie aus der Sammlung der Bestellungen der Mitarbeiter&ast;in entfernt wird.
 4. Diskutieren Sie, welche Java-`Collection` am besten geeignet ist, um die Bestellungen zu speichern und begründen Sie warum. Gilt dasselbe für die Mitarbeiter&ast;innen? Geben Sie Ihre Antworten in einer Markdown-Datei `restaurant_orders.md` im Hauptverzeichnis ab.
@@ -129,7 +129,7 @@ Die API befindet sich im Paket [`de.phl.programmingproject.candyproduction`](src
 4. Implementieren Sie die Operation `printCandy(final Candy candy)`, die eine String-Repräsentation des gegebenen Bonbons ausgibt. Verwenden Sie einen Formatstring (`String.format(...)`) um die String-Repräsentation zu erstellen.
 5. Implementieren Sie `produceCandies` in `CandyFactory` als **einfache Serienproduktion**:
    - Fügen Sie vor dem Aufruf mindestens zwei Zuckeraromen und ein Kernaroma hinzu.
-   - Das feste Rezept verwendet die **ersten beiden** Zuckeraromen und das **erste** Kernaroma. Weitere Aromen werden für diese Aufgabe nicht verwendet.
+   - Das feste Rezept verwendet die **ersten beiden** Zuckeraromen und das **erste** Kernaroma. Weitere Aromen werden für diese Aufgabe nicht verwendet. Für die Pflichtaufgabe dürfen Sie voraussetzen, dass die ersten beiden Zuckeraromen verschieden sind; doppelte erste Aromen werden nicht bewertet.
    - Erzeugen Sie mit einer Schleife genau `amount` neue Bonbon-Objekte nach diesem Rezept und geben Sie diese als `List<Candy>` zurück. Alle dürfen denselben Geschmack haben; dasselbe Bonbon-Objekt darf jedoch nicht mehrfach in die Liste eingetragen werden.
    - Für `amount < 1` werfen Sie eine `IllegalArgumentException`; fehlen Zutaten, werfen Sie eine `IllegalStateException`. Prüfen Sie zuerst `amount`.
    - Beispiel: Zuckeraromen `[Erdbeere, Blaubeere, Vanille]`, Kernaromen `[Zitrone, Kirsche]` und `amount = 3` ergeben drei einzelne Erdbeer-Blaubeer-Bonbons mit Zitronenkern.

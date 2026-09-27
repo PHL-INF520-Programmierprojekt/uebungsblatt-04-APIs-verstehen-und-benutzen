@@ -23,7 +23,12 @@ public class CandyProductionLineTest {
         List<List<?>> calls = new ArrayList<>();
         try (MockedConstruction<Candy> construction = mockConstruction(Candy.class, (mock, context) -> {
             List<?> args = new ArrayList<>(context.arguments());
-            calls.add(args);
+            // Aufgabe 1/3 verlangen manuelle Konstruktion. Bonbons aus der
+            // späteren Serienproduktion dürfen diese Aufgaben nicht verdeckt erfüllen.
+            boolean fromFactory = StackWalker.getInstance().walk(frames -> frames.anyMatch(frame ->
+                    frame.getClassName().equals(CandyFactory.class.getName())
+                            && frame.getMethodName().equals("produceCandies")));
+            if (!fromFactory) calls.add(args);
             when(mock.getSugarMix()).thenReturn((SugarMix) args.getFirst());
             when(mock.hasJuicyCore()).thenReturn(args.size() == 2 && args.get(1) != null);
             if (args.size() == 2) when(mock.getJuicyCore()).thenReturn((JuicyCore) args.get(1));
@@ -73,7 +78,7 @@ public class CandyProductionLineTest {
 
     private CandyFactory preparedFactory() {
         CandyFactory factory = new CandyFactory();
-        factory.addSugarMixFlavors(List.of("Erdbeere", "Blaubeere", "Vanille"));
+        factory.addSugarMixFlavors(List.of("Vanille", "Erdbeere", "Blaubeere"));
         factory.addJuicyCoreFlavors(List.of("Zitrone", "Kirsche"));
         return factory;
     }
@@ -88,7 +93,7 @@ public class CandyProductionLineTest {
             for (Candy candy : candies) {
                 assertNotNull(candy);
                 assertTrue(identities.add(candy), "Erzeugen Sie für jeden Listeneintrag ein neues Bonbon.");
-                assertEquals(Set.of("Erdbeere", "Blaubeere"), candy.getSugarMix().getFlavors());
+                assertEquals(Set.of("Vanille", "Erdbeere"), candy.getSugarMix().getFlavors());
                 assertTrue(candy.hasJuicyCore(), "Jedes Bonbon benötigt einen Kern.");
                 assertEquals("Zitrone", candy.getJuicyCore().getFlavor());
             }
