@@ -119,7 +119,7 @@ Die API befindet sich im Paket [`de.phl.programmingproject.candyproduction`](src
 - [`CandyFactory`](src/main/java/de/phl/programmingproject/candyproduction/CandyFactory.java)
     - `void addSugarMixFlavors(final List<String> sugarMixFlavors)` - Fügt mehrere Geschmacksrichtungen für Zucker-Mischungen zu den Bonbon-Zutaten hinzu.
     - `void addJuicyCoreFlavors(final List<String> juicyCoreFlavors)` - Fügt mehrere Geschmacksrichtungen für saftige Kerne zu den Bonbon-Zutaten hinzu.
-    - `Set<Candy> produceCandies(final int amount)` - Produziert `amount` Bonbons. Jedes Bonbon ist einzigartig in der Geschmackskomposition.
+    - `List<Candy> produceCandies(final int amount)` - Produziert `amount` einzelne Bonbons nach dem unten beschriebenen festen Rezept.
 
 ### Aufgaben
 
@@ -127,8 +127,16 @@ Die API befindet sich im Paket [`de.phl.programmingproject.candyproduction`](src
 2. Implementieren Sie den zweiten Konstruktor der Klasse `Candy` und die Operation `getJuicyCore`. Der zweite Konstruktor sollte ein Bonbon mit einer Zucker-Mischung und einem saftigen Kern erstellen. Die Operation `getJuicyCore` sollte den saftigen Kern des Bonbons zurückgeben.
 3. Erweitern Sie die `main`-Operation und erstellen Sie manuell ein Bonbon, das aus einer Zucker-Mischung mit "Strawberry"- und "Blueberry"-Geschmack besteht und einen saftigen Kern mit "Lemon"-Geschmack enthält.
 4. Implementieren Sie die Operation `printCandy(final Candy candy)`, die eine String-Repräsentation des gegebenen Bonbons ausgibt. Verwenden Sie einen Formatstring (`String.format(...)`) um die String-Repräsentation zu erstellen.
-5. Implementieren Sie die Operation `produceCandies` in der Klasse `CandyFactory`. Diese Operation sollte `amount` Bonbons mit einzigartigen Geschmackskombinationen produzieren (d.h., jedes Bonbon muss eine einzigartige Mischung von Zucker-Mischungen mit einem saftigen Kern haben).
-    * Hinweis: Sie müssen die Zucker-Mischungen und saftigen Kerne zur Bonbonfabrik hinzufügen, bevor Sie `produceCandies(final int amount)` aufrufen!
+5. Implementieren Sie `produceCandies` in `CandyFactory` als **einfache Serienproduktion**:
+   - Fügen Sie vor dem Aufruf mindestens zwei Zuckeraromen und ein Kernaroma hinzu.
+   - Das feste Rezept verwendet die **ersten beiden** Zuckeraromen und das **erste** Kernaroma. Weitere Aromen werden für diese Aufgabe nicht verwendet.
+   - Erzeugen Sie mit einer Schleife genau `amount` neue Bonbon-Objekte nach diesem Rezept und geben Sie diese als `List<Candy>` zurück. Alle dürfen denselben Geschmack haben; dasselbe Bonbon-Objekt darf jedoch nicht mehrfach in die Liste eingetragen werden.
+   - Für `amount < 1` werfen Sie eine `IllegalArgumentException`; fehlen Zutaten, werfen Sie eine `IllegalStateException`. Prüfen Sie zuerst `amount`.
+   - Beispiel: Zuckeraromen `[Erdbeere, Blaubeere, Vanille]`, Kernaromen `[Zitrone, Kirsche]` und `amount = 3` ergeben drei einzelne Erdbeer-Blaubeer-Bonbons mit Zitronenkern.
+
+**Zulässige Begriffe für Aufgaben 1 und 3:** Erdbeere/Strawberry, Heidelbeere/Blaubeere/Blueberry und Zitrone/Lemon. Groß- und Kleinschreibung spielen keine Rolle; deutsche und englische Begriffe dürfen gemischt werden. Beide Beerenaromen und der Zitronenkern aus Aufgabe 3 müssen zum selben Bonbon gehören. Sie müssen kein Übersetzungsprogramm schreiben.
+
+**Freiwillige Vertiefung:** Überlegen Sie anschließend, wie eine zusätzliche Methode unterschiedliche Geschmackskombinationen erzeugen könnte. Die Pflichtmethode `produceCandies` und ihre Tests bleiben dabei unverändert.
 
 ## Übung 04: Diskussion
 

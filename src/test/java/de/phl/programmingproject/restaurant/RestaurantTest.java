@@ -1,14 +1,12 @@
 package de.phl.programmingproject.restaurant;
 
 import de.phl.programmingproject.TestUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedConstruction;
+import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,14 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Test class for the {@link RestaurantOrders} exercise.
  */
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({RestaurantOrders.class, RestaurantTest.class})
 public class RestaurantTest {
 
     Employee employeeSpy;
@@ -32,78 +27,39 @@ public class RestaurantTest {
 
     Restaurant restaurantSpy;
 
-    static String restaurantOrdersFileContent;
-
-    @Before
+    @BeforeEach
     public void initMocks() {
         employeeSpy = Mockito.spy(new Employee());
         restaurantSpy = Mockito.spy(new Restaurant(employeeSpy));
     }
 
-    @BeforeClass
-    public static void readMainMethod() {
-        String filePath = "./src/main/java/de/phl/programmingproject/restaurant/RestaurantOrders.java";
-        restaurantOrdersFileContent = null;
-        try {
-            restaurantOrdersFileContent = new String(Files.readAllBytes(Paths.get(filePath)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @org.junit.Test
-    public void task_1_restaurant_was_created() throws Exception {
-        /*Pattern pattern = Pattern.compile(".*=.*new Restaurant\\(.*\\);");
-        boolean restaurantCreated = false;
-        for (String line : restaurantOrdersFileContent.split("\n")) {
-            if (pattern.matcher(line).find()) {
-               restaurantCreated = true;
-               break;
-            }
-        }
-        if(!restaurantCreated){
-            fail("The 'Restaurant' object is not created in the 'main' method of the 'RestaurantOrders' file.");
-        }*/
-
-        PowerMockito.whenNew(Restaurant.class).withAnyArguments().thenReturn(restaurantSpy);
-        RestaurantOrders.main(null);
-        try {
-            PowerMockito.verifyNew(Restaurant.class).withArguments(Mockito.any(Employee.class));
-        } catch (AssertionError e) {
-            fail("The 'Restaurant' object is not created in the 'main' method of the 'RestaurantOrders' file.");
+    @Test
+    public void task_1_restaurant_was_created() {
+        List<List<?>> calls = new ArrayList<>();
+        try (MockedConstruction<Restaurant> construction = TestUtils.observeConstruction(Restaurant.class,
+                (mock, context) -> calls.add(new ArrayList<>(context.arguments())))) {
+            RestaurantOrders.main(new String[0]);
+            assertEquals(1, calls.size(), "Erstellen Sie genau ein Restaurant.");
+            assertInstanceOf(Employee.class, calls.getFirst().getFirst(), "Das Restaurant benötigt einen Inhaber.");
         }
     }
 
     @Test
-    public void task_1_restaurant_has_one_employee() throws Exception {
-        /*
-        Pattern pattern = Pattern.compile("\\.hireEmployee\\(.*\\);");
-        for (String line : restaurantOrdersFileContent.split("\n")) {
-            if(pattern.matcher(line).find())
-                return;
-        }
-        fail("The 'Restaurant' has no employees! Please hire at least one employee.");
-         */
-
-        PowerMockito.whenNew(Restaurant.class).withAnyArguments().thenReturn(restaurantSpy);
-        RestaurantOrders.main(null);
-        try {
-            Mockito.verify(restaurantSpy, Mockito.times(1)).hireEmployee(Mockito.any(Employee.class));
-        } catch (AssertionError e) {
-            fail("The 'Restaurant' has no employees! Please hire at least one employee.");
+    public void task_1_restaurant_has_one_employee() {
+        try (MockedConstruction<Restaurant> construction = TestUtils.observeConstruction(Restaurant.class)) {
+            RestaurantOrders.main(new String[0]);
+            assertEquals(1, construction.constructed().size(), "Erstellen Sie genau ein Restaurant.");
+            verify(construction.constructed().getFirst()).hireEmployee(any(Employee.class));
         }
     }
 
-    @org.junit.Test
-    public void task_1_ten_orders_placed() throws Exception {
-        // mock the constructor of the Restaurant class
-        PowerMockito.whenNew(Restaurant.class).withAnyArguments().thenReturn(restaurantSpy);
-        RestaurantOrders.main(null);
-        // verify with Mockito that the public 'placeOrder'  method was called 10 times
-        try {
-            Mockito.verify(restaurantSpy, Mockito.times(10)).placeOrder(Mockito.any(Order.class));
-        } catch (AssertionError e) {
-            fail("The 'placeOrder' method of the 'Restaurant' class was not called 10 times.");
+    @Test
+    public void task_1_ten_orders_placed() {
+        try (MockedConstruction<Restaurant> construction = TestUtils.observeConstruction(Restaurant.class)) {
+            RestaurantOrders.main(new String[0]);
+            assertEquals(1, construction.constructed().size(), "Erstellen Sie genau ein Restaurant.");
+            verify(construction.constructed().getFirst(), times(10)).placeOrder(any(Order.class));
+            verify(construction.constructed().getFirst()).process();
         }
     }
 
@@ -138,7 +94,7 @@ public class RestaurantTest {
         }
         for (Employee employee : busyEmployees) {
             Mockito.verify(employee, Mockito.atLeast(1)).currentOrdersCount();
-            Mockito.verifyNoMoreInteractions(employee);
+            Mockito.verify(employee, Mockito.never()).assignOrder(Mockito.any(Order.class));
         }
     }
 

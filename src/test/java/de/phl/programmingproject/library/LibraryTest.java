@@ -1,13 +1,11 @@
 package de.phl.programmingproject.library;
 
 import de.phl.programmingproject.TestUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockedConstruction;
+import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,8 +18,6 @@ import static org.mockito.Mockito.*;
 /**
  * Test class for the {@link LibraryDay} exercise.
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({LibraryDay.class, LibraryTest.class})
 public class LibraryTest {
 
     List<Book> books = Arrays.asList(new Book("The Lord of the Rings", "J. R. R. Tolkien"),
@@ -29,39 +25,31 @@ public class LibraryTest {
             new Book("Harry Potter and the Philosopher's Stone", "J. K. Rowling"));
     Library librarySpy;
 
-    @Before
+    @BeforeEach
     public void initMocks() {
         librarySpy = Mockito.spy(new Library(books));
     }
 
-    @org.junit.Test
-    public void task_1_library_with_three_books_and_two_visitors_was_created() throws Exception {
-
-        PowerMockito.whenNew(Library.class).withAnyArguments().thenReturn(librarySpy);
-        Mockito.doNothing().when(librarySpy).lendBook(anyString(), anyInt());
-        Mockito.doNothing().when(librarySpy).returnBook(anyString(), anyInt());
-
-        LibraryDay.main(null);
-        try {
-            PowerMockito.verifyNew(Library.class).withArguments(Mockito.any(Collection.class));
-        } catch (AssertionError e) {
-            fail("The 'Library' object is not correctly created in the 'main' method of the 'Library' file.");
+    @Test
+    public void task_1_library_with_three_books_and_two_visitors_was_created() {
+        List<List<?>> calls = new ArrayList<>();
+        try (MockedConstruction<Library> construction = TestUtils.observeConstruction(Library.class,
+                (mock, context) -> calls.add(new ArrayList<>(context.arguments())))) {
+            LibraryDay.main(new String[0]);
+            assertEquals(1, calls.size(), "Erstellen Sie genau eine Bibliothek.");
+            Collection<?> suppliedBooks = assertInstanceOf(Collection.class, calls.getFirst().getFirst());
+            assertEquals(3, suppliedBooks.size(), "Übergeben Sie drei Bücher an den Konstruktor.");
+            assertTrue(suppliedBooks.stream().allMatch(Book.class::isInstance), "Die Sammlung darf nur Bücher enthalten.");
         }
-
-        assertEquals(3, librarySpy.getBookCount(), "The 'Library' object does not contain three books.");
     }
 
     @Test
-    public void task_1_visitors_paula_and_simon_registered() throws Exception {
-        PowerMockito.whenNew(Library.class).withAnyArguments().thenReturn(librarySpy);
-        Mockito.doNothing().when(librarySpy).lendBook(anyString(), anyInt());
-        Mockito.doNothing().when(librarySpy).returnBook(anyString(), anyInt());
-        LibraryDay.main(null);
-        try {
-            verify(librarySpy).registerVisitor("Paula");
-            verify(librarySpy).registerVisitor("Simon");
-        } catch (AssertionError e) {
-            fail("The visitors 'Paula' and/or 'Simon' where not correctly registered.");
+    public void task_1_visitors_paula_and_simon_registered() {
+        try (MockedConstruction<Library> construction = TestUtils.observeConstruction(Library.class)) {
+            LibraryDay.main(new String[0]);
+            assertEquals(1, construction.constructed().size(), "Erstellen Sie genau eine Bibliothek.");
+            verify(construction.constructed().getFirst()).registerVisitor("Paula");
+            verify(construction.constructed().getFirst()).registerVisitor("Simon");
         }
     }
 

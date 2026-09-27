@@ -1,3 +1,5 @@
+> **Hinweis zum Stand:** Die aktuelle verbindliche Aufgabenfassung steht in [README.md](README.md). Die englische Übersetzung wurde noch nicht an die vereinfachte Candy-Aufgabe angepasst.
+
 # Exercise Sheet: Understanding and Usage of Given APIs
 [Link to German Version](./README.md)
 
@@ -33,7 +35,7 @@ The API is located in the `de.phl.programmingproject.restaurant` package and con
 
 ### Tasks
 
-1. Implement the `main` operation of the class `RestaurantOrders` to manually create a restaurant with an owner and one employee. 
+1. Implement the `main` operation of the class `RestaurantOrders` to manually create a restaurant with an owner and one employee.
    Then, place ten orders and let them be processed. The `orderNames` list contains the names for all orders.
 2. Implement the restaurant's `placeOrder` operation and the employee's `assignOrder` operation. Pay attention to defensive programming.
 3. Implement the `processOrders` operation of the `Employee` class. An order is processes by calling its `handle` operation and removing it from the employee's collection.
@@ -126,8 +128,8 @@ The API is located in the `de.phl.programmingproject.candyproduction` package an
 2. Implement the second constructor of the `Candy` class and the `getJuicyCore` operation. The second constructor should create a candy with a sugar mix and a juicy core. The `getJuicyCore` operation should return the juicy core of the candy.
 3. Extend the `main` operation and manually create a candy with a strawberry and blueberry flavored sugar mix and contains a lemon flavored juicy core.
 4. Implement the operation `printCandy(final Candy candy)` which prints a string representation of the given candy. Use a format string (`String.format(...)`) to build the string representation.
-5. Implement the `produceCandies` operation in the `CandyFactory` class. This operation should produce `amount` candies with unique flavor combinations (i.e., each candy must have a unique set of sugar mixes with a juicy core). 
-   * Note: You need to add the sugar mixes and juicy cores to the candy factory before calling `produceCandies(final int amount)`!. 
+5. Implement the `produceCandies` operation in the `CandyFactory` class. This operation should produce `amount` candies with unique flavor combinations (i.e., each candy must have a unique set of sugar mixes with a juicy core).
+   * Note: You need to add the sugar mixes and juicy cores to the candy factory before calling `produceCandies(final int amount)`!.
 
 ## Exercise: Discussion
 

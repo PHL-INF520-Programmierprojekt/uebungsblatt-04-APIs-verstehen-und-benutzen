@@ -51,18 +51,19 @@ public class TestUtils {
 
         // Create a stream to hold the output
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream newOut = new PrintStream(baos);
+        PrintStream newOut = new PrintStream(baos, true, java.nio.charset.StandardCharsets.UTF_8);
 
         // Set the new stream as the standard out
         System.setOut(newOut);
 
         // Call the action that prints to the system out
-        actionThatPrintsToSystemOut.run();
+        try {
+            actionThatPrintsToSystemOut.run();
+        } finally {
+            System.setOut(originalOut);
+        }
 
-        // Reset the standard out
-        System.setOut(originalOut);
-
-        String output = baos.toString();
+        String output = baos.toString(java.nio.charset.StandardCharsets.UTF_8).replace("\r\n", "\n");
         return output;
     }
 
@@ -82,7 +83,7 @@ public class TestUtils {
         // load content of the file
         String txt;
         try {
-            txt = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+            txt = new String(Files.readAllBytes(path), StandardCharsets.UTF_8).replace("\r\n", "\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -399,5 +400,29 @@ public class TestUtils {
     public static void assertFileExistsInRootOurSrcDirectory(String fileName){
         assertTrue(fileExistsInRootOrSrcDirectory(fileName),
                 String.format("The file '%s' does not exist in the root (or './src') directory of the project.", fileName));
+    }
+
+    /** Beobachtet Konstruktion und Methodenaufrufe, erhält aber den echten Objektzustand. */
+    public static <T> org.mockito.MockedConstruction<T> observeConstruction(Class<T> type,
+            org.mockito.MockedConstruction.MockInitializer<T> recorder) {
+        return org.mockito.Mockito.mockConstruction(type,
+                org.mockito.Mockito.withSettings().defaultAnswer(org.mockito.Mockito.CALLS_REAL_METHODS),
+                (mock, context) -> {
+                    context.constructor().setAccessible(true);
+                    Object initialized = context.constructor().newInstance(context.arguments().toArray());
+                    for (Class<?> current = type; current != Object.class; current = current.getSuperclass()) {
+                        for (java.lang.reflect.Field field : current.getDeclaredFields()) {
+                            if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                                field.setAccessible(true);
+                                field.set(mock, field.get(initialized));
+                            }
+                        }
+                    }
+                    recorder.prepare(mock, context);
+                });
+    }
+
+    public static <T> org.mockito.MockedConstruction<T> observeConstruction(Class<T> type) {
+        return observeConstruction(type, (mock, context) -> {});
     }
 }
